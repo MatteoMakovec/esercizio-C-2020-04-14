@@ -22,19 +22,19 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: esercizio-C-2020-04-14
+all: 2020-04-14
 
 # Tool invocations
-esercizio-C-2020-04-14: $(OBJS) $(USER_OBJS)
+2020-04-14: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C Linker'
-	gcc  -o "esercizio-C-2020-04-14" $(OBJS) $(USER_OBJS) $(LIBS)
+	gcc  -o "2020-04-14" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) esercizio-C-2020-04-14
+	-$(RM) $(EXECUTABLES)$(OBJS)$(C_DEPS) 2020-04-14
 	-@echo ' '
 
 .PHONY: all clean dependents

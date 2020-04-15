@@ -126,6 +126,7 @@ int add_to_address_book(contact_type * c);
 int remove_from_address_book(contact_type * c);
 int search_in_address_book(contact_type * c);
 void sort_by_name();
+void swap(int i);
 
 int IDused = 0;
 int size = 1;
@@ -137,7 +138,7 @@ contact_type * address_book[ADDRESS_BOOK_SIZE];
 
 int main(int argc, char *argv[]) {
 	// [ 1 ]
-	printf(" [ 1 ] \n");
+	printf("[ 1 ] \n");
 	contact_type *dino = create_contact("dino", "+391237");
 	add_to_address_book(dino);
 	print_contact(dino);
@@ -164,7 +165,7 @@ int main(int argc, char *argv[]) {
 	printf("\n\n");
 
 	// [ 2 ]
-	printf(" [ 2 ] \n");
+	printf("[ 2 ] \n");
 	if(search_in_address_book(antonio) != -1){
 		remove_from_address_book(antonio);
 	}
@@ -172,7 +173,7 @@ int main(int argc, char *argv[]) {
 
 
 	// [ 3 ]
-	printf(" [ 3 ] \n");
+	printf("[ 3 ] \n");
 	contact_type *pino = create_contact("pino", "+399999");
 	add_to_address_book(pino);
 	print_contact(pino);
@@ -188,20 +189,26 @@ int main(int argc, char *argv[]) {
 
 
 	// [ 4 ]
-	printf(" [ 4 ] \n");
+	printf("[ 4 ] \n");
 	antonio = create_contact("antonio", "+391234");
 	add_to_address_book(antonio);
 	print_contact(antonio);
 	printf("\n\n");
 
 
-	// [ 5 ]	SORT
-	printf(" [ 5 ] \n");
+	// [ 5 ]
+	printf("[ 5 ] \n");
+	sort_by_name();
 	printf("\n\n");
 
 
 	// [ 6 ]	OUTPUT ORDINATO
-	printf(" [ 6 ] \n");
+	printf("[ 6 ] \n");
+	for(int i=0; i<ADDRESS_BOOK_SIZE; i++){
+		if(address_book[i] != NULL){
+			printf("ID: %d, Nome: %s, Telefono: %s\n", address_book[i]->id, address_book[i]->name, address_book[i]->phone);
+		}
+	}
 	printf("\n\n");
 
 
@@ -309,7 +316,24 @@ int search_in_address_book(contact_type * c){
 }
 
 
-// funzione che fa il sort dei contatti in address_book, utilizzando compare_contacts()
 void sort_by_name(){
+	int validate = 0;
 
+	while(validate != 1){
+		validate = 1;
+		for(int i=0; i<ADDRESS_BOOK_SIZE-1; i++){
+			int result = memcmp(address_book[i]->name, address_book[i+1]->name, NAME_LEN);
+			if(result > 0){
+				swap(i);
+				validate = 0;
+			}
+		}
+	}
 }
+
+void swap(int i){
+    contact_type temp = *address_book[i];
+    *address_book[i] = *address_book[i+1];
+    *address_book[i+1] = temp;
+}
+
