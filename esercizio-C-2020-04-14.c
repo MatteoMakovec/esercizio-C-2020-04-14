@@ -126,7 +126,7 @@ int add_to_address_book(contact_type * c);
 int remove_from_address_book(contact_type * c);
 int search_in_address_book(contact_type * c);
 void sort_by_name();
-void swap(int i);
+int add_contact_ordered(contact_type *contact);
 
 int IDused = 0;
 int size = 1;
@@ -134,6 +134,8 @@ int size = 1;
 contact_type * address_book[ADDRESS_BOOK_SIZE];
 // è un array di puntatori a contact_type
 // se address_book[i] == NULL, vuole dire che la cella è utilizzabile per conservare l'indirizzo di un contatto
+
+contact_type * address_book_ordered[ADDRESS_BOOK_SIZE];
 
 
 int main(int argc, char *argv[]) {
@@ -205,8 +207,8 @@ int main(int argc, char *argv[]) {
 	// [ 6 ]	OUTPUT ORDINATO
 	printf("[ 6 ] \n");
 	for(int i=0; i<ADDRESS_BOOK_SIZE; i++){
-		if(address_book[i] != NULL){
-			printf("ID: %d, Nome: %s, Telefono: %s\n", address_book[i]->id, address_book[i]->name, address_book[i]->phone);
+		if(address_book_ordered[i] != NULL){
+			printf("ID: %d, Nome: %s, Telefono: %s\n", address_book_ordered[i]->id, address_book_ordered[i]->name, address_book_ordered[i]->phone);
 		}
 	}
 	printf("\n\n");
@@ -317,23 +319,56 @@ int search_in_address_book(contact_type * c){
 
 
 void sort_by_name(){
-	int validate = 0;
+	int j = 0;
+	int pos = 0;
 
-	while(validate != 1){
-		validate = 1;
-		for(int i=0; i<ADDRESS_BOOK_SIZE-1; i++){
-			int result = memcmp(address_book[i]->name, address_book[i+1]->name, NAME_LEN);
-			if(result > 0){
-				swap(i);
-				validate = 0;
+	while(j<ADDRESS_BOOK_SIZE){
+		for(int i=0; i<ADDRESS_BOOK_SIZE; i++){
+			if(address_book[i] != NULL){
+				int res = strcmp(address_book[pos]->name, address_book[i]->name);
+				if(res>0){
+					pos = i;
+				}
 			}
+		}
+		if(address_book[pos] != NULL){
+			add_contact_ordered(address_book[pos]);
+			remove_from_address_book(address_book[pos]);
+		}
+		for(int j=0; j<ADDRESS_BOOK_SIZE; j++){
+			if(address_book[j] != NULL){
+				pos = j;
+			}
+		}
+		j++;
+	}
+
+	for(int i=0; i<ADDRESS_BOOK_SIZE; i++){
+		if(address_book[i] != NULL){
+			add_to_address_book(address_book[i]);
 		}
 	}
 }
 
-void swap(int i){
-    contact_type temp = *address_book[i];
-    *address_book[i] = *address_book[i+1];
-    *address_book[i+1] = temp;
+
+
+int add_contact_ordered(contact_type *contact){
+	int i=0;
+	if (contact == NULL){
+		printf("null");
+		return-1;
+	}
+	while(i<ADDRESS_BOOK_SIZE){
+		if(address_book_ordered[i]==NULL){
+			address_book_ordered[i] = contact;
+			return i;
+		}
+		i++;
+	}
+	if (i >= ADDRESS_BOOK_SIZE){
+		printf("pieno");
+		return-1;
+	}
+	return 0;
 }
 
